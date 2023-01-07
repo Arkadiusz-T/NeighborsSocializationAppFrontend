@@ -8,10 +8,11 @@ import { HeaderComponent } from './navigation/header/header.component';
 import { SidenavComponent } from './navigation/sidenav/sidenav.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { EventsComponent } from './events/events.component';
+import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 
 @NgModule({
   declarations: [AppComponent, HeaderComponent, SidenavComponent, EventsComponent],
-  imports: [BrowserModule, AppRoutingModule, MaterialModule, BrowserAnimationsModule],
+  imports: [BrowserModule, AppRoutingModule, MaterialModule, BrowserAnimationsModule, LeafletModule],
   providers: [],
   bootstrap: [AppComponent]
 })
