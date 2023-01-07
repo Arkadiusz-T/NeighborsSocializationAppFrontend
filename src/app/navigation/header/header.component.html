@@ -1,22 +1,11 @@
 <mat-toolbar color="primary">
-  <span class="hidden md-block" fxHide.gt-xs>
+  <span class="sm:hidden">
     <button mat-icon-button (click)="onToggleSidenav()">
       <mat-icon>menu</mat-icon>
     </button>
   </span>
   <a routerLink="/" class="navigation-item">Neighbours Socializer</a>
-  <span class="navigation-item space"></span>
-  <a routerLink="/events" class="navigation-item">Wydarzenia</a>
-  <a routerLink="/add-event" class="navigation-item">Dodaj wydarzenie</a>
-
-  <!--  <div fxFlex fxLayout fxLayoutAlign="flex-end" fxHide.xs>-->
-  <!--    <ul fxLayout fxLayoutGap="40px" class="navigation-items">-->
-  <!--      <li>-->
-  <!--        <a routerLink="/events">Wydarzenia</a>-->
-  <!--      </li>-->
-  <!--      <li>-->
-  <!--        <a routerLink="/add-event">Dodaj wydarzenie</a>-->
-  <!--      </li>-->
-  <!--    </ul>-->
-  <!--  </div>-->
+  <span class="hidden sm:inline space"></span>
+  <a routerLink="/events" class="hidden sm:inline navigation-item">Wydarzenia</a>
+  <a routerLink="/add-event" class="hidden sm:inline navigation-item">Dodaj wydarzenie</a>
 </mat-toolbar>
