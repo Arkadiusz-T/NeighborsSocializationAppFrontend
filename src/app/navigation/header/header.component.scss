@@ -1,0 +1,17 @@
+a {
+  text-decoration: none;
+  color: white;
+}
+
+a:hover,
+a:active {
+  color: lightgrey;
+}
+
+.navigation-item {
+  padding: 0 14px;
+}
+
+.space {
+  flex: 1 1 auto;
+}
