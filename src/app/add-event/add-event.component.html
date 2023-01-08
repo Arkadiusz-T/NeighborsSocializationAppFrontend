@@ -1,29 +1,55 @@
 <section>
-  <form [formGroup]="addEventForm">
-    <mat-form-field>
-      <mat-label>Nazwa wydarzenia</mat-label>
-      <input matInput type="text" formControlName="name" />
-    </mat-form-field>
+  <h1 class="col-offset-1 my-5">Dodaj wydarzenie</h1>
 
-    <mat-form-field appearance="fill">
-      <mat-label>Data wydarzenia</mat-label>
-      <input matInput [matDatepicker]="datePicker" formControlName="date" />
-      <mat-hint>MM/DD/YYYY</mat-hint>
-      <mat-datepicker-toggle matIconSuffix [for]="datePicker"></mat-datepicker-toggle>
-      <mat-datepicker #datePicker></mat-datepicker>
-    </mat-form-field>
+  <form [formGroup]="addEventForm" class="grid mt-2 mx-0" (ngSubmit)="onSubmit()">
+    <div class="col-offset-2 col-4">
+      <mat-form-field>
+        <mat-label>Nazwa wydarzenia</mat-label>
+        <input matInput type="text" formControlName="name" />
+      </mat-form-field>
+    </div>
 
-    <mat-form-field>
-      <mat-label>Czas wydarzenia</mat-label>
-      <input
-        matInput
-        [format]="24"
-        formControlName="time"
-        [ngxMatTimepicker]="timePicker"
-        placeholder="16:00"
-        readonly />
-      <mat-icon matSuffix (click)="timePicker.open()">watch_later</mat-icon>
-    </mat-form-field>
-    <ngx-mat-timepicker #timePicker></ngx-mat-timepicker>
+    <div class="col-4">
+      <mat-form-field>
+        <mat-label>Data wydarzenia</mat-label>
+        <input matInput [matDatepicker]="datePicker" formControlName="date" />
+        <mat-hint>MM/DD/YYYY</mat-hint>
+        <mat-datepicker-toggle matIconSuffix [for]="datePicker"></mat-datepicker-toggle>
+        <mat-datepicker #datePicker></mat-datepicker>
+      </mat-form-field>
+    </div>
+
+    <div class="col-offset-2 col-4">
+      <mat-form-field>
+        <mat-label>Czas wydarzenia</mat-label>
+        <input
+          matInput
+          [format]="24"
+          formControlName="time"
+          [ngxMatTimepicker]="timePicker"
+          placeholder="16:00"
+          readonly />
+        <mat-icon matSuffix (click)="timePicker.open()">watch_later</mat-icon>
+      </mat-form-field>
+      <ngx-mat-timepicker #timePicker></ngx-mat-timepicker>
+    </div>
+
+    <div class="col-4">
+      <mat-form-field>
+        <mat-label>Czas trwania</mat-label>
+        <input matInput type="number" formControlName="duration" />
+        <mat-hint>w minutach</mat-hint>
+      </mat-form-field>
+    </div>
+
+    <div class="col-offset-2 col-8">
+      <div id="map" leaflet [leafletOptions]="options" (leafletClick)="onMapClick($event)">
+        <div [leafletLayer]="layer" *ngIf="layer"></div>
+      </div>
+    </div>
+
+    <div class="col-offset-2 col-8">
+      <button type="submit" mat-flat-button [disabled]="!addEventForm.valid" color="primary">Dodaj</button>
+    </div>
   </form>
 </section>

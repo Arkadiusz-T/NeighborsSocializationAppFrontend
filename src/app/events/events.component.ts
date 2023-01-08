@@ -10,7 +10,6 @@ import { EventReadModel } from './event.model';
   styleUrls: ['./events.component.scss']
 })
 export class EventsComponent implements OnInit, OnDestroy {
-  private events: EventReadModel[] = [];
   private eventsChangedSubscription!: Subscription;
 
   layers: Layer[] = [];
@@ -30,19 +29,23 @@ export class EventsComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.eventsChangedSubscription = this.eventsService.eventsChanged.subscribe(() => {
-      this.events = this.eventsService.getEvents();
-      this.addMarkersToMap();
+      const events = this.eventsService.getEvents();
+      this.addMarkersToMap(events);
     });
     this.eventsService.fetchAllEvents();
   }
 
-  private addMarkersToMap() {
-    this.events.map((event) => {
-      const startTime = new Date(event.startTime);
-      const endTime = new Date(event.endTime);
-      const date = startTime.getDate() + '.' + startTime.getMonth() + '.' + startTime.getFullYear();
-      const startHour = startTime.getHours() + ':' + (startTime.getMinutes() < 10 ? '0' : '') + startTime.getMinutes();
-      const endHour = endTime.getHours() + ':' + (endTime.getMinutes() < 10 ? '0' : '') + endTime.getMinutes();
+  private addMarkersToMap(events: EventReadModel[]) {
+    events.map((event) => {
+      const duration = event.duration;
+      const dateTime = new Date(event.dateTime);
+      const formattedDate = dateTime.toLocaleString('pl-PL', {
+        day: 'numeric',
+        month: 'short',
+        year: 'numeric',
+        hour: 'numeric',
+        minute: '2-digit'
+      });
 
       const layer = marker(latLng(event.position[0], event.position[1]), {
         icon: icon({
@@ -51,7 +54,7 @@ export class EventsComponent implements OnInit, OnDestroy {
           iconRetinaUrl: 'assets/marker-icon-2x.png',
           shadowUrl: 'assets/marker-shadow.png'
         })
-      }).bindPopup(`<b>${event.name}</b><br>${date}<br>${startHour} - ${endHour}`);
+      }).bindPopup(`<b>${event.name}</b><br>${formattedDate}<br>${duration} minut`);
       this.layers.push(layer);
     });
   }
