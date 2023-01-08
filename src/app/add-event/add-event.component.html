@@ -1,0 +1,29 @@
+<section>
+  <form [formGroup]="addEventForm">
+    <mat-form-field>
+      <mat-label>Nazwa wydarzenia</mat-label>
+      <input matInput type="text" formControlName="name" />
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Data wydarzenia</mat-label>
+      <input matInput [matDatepicker]="datePicker" formControlName="date" />
+      <mat-hint>MM/DD/YYYY</mat-hint>
+      <mat-datepicker-toggle matIconSuffix [for]="datePicker"></mat-datepicker-toggle>
+      <mat-datepicker #datePicker></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Czas wydarzenia</mat-label>
+      <input
+        matInput
+        [format]="24"
+        formControlName="time"
+        [ngxMatTimepicker]="timePicker"
+        placeholder="16:00"
+        readonly />
+      <mat-icon matSuffix (click)="timePicker.open()">watch_later</mat-icon>
+    </mat-form-field>
+    <ngx-mat-timepicker #timePicker></ngx-mat-timepicker>
+  </form>
+</section>

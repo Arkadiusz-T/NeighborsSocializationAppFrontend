@@ -12,13 +12,15 @@ import { MatInputModule } from '@angular/material/input';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
-import { MatOptionModule, MatRippleModule } from '@angular/material/core';
+import { MatNativeDateModule, MatOptionModule, MatRippleModule } from '@angular/material/core';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { NgxMatTimepickerModule } from 'ngx-mat-timepicker';
 
 @NgModule({
   imports: [
@@ -42,7 +44,10 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     MatProgressBarModule,
     MatRippleModule,
     MatDividerModule,
-    MatButtonToggleModule
+    MatButtonToggleModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    NgxMatTimepickerModule
   ],
   exports: [
     MatToolbarModule,
@@ -65,7 +70,10 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     MatProgressBarModule,
     MatRippleModule,
     MatDividerModule,
-    MatButtonToggleModule
+    MatButtonToggleModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    NgxMatTimepickerModule
   ]
 })
 export class MaterialModule {}

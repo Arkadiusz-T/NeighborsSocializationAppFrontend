@@ -10,10 +10,20 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { EventsComponent } from './events/events.component';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 import { HttpClientModule } from '@angular/common/http';
+import { AddEventComponent } from './add-event/add-event.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
-  declarations: [AppComponent, HeaderComponent, SidenavComponent, EventsComponent],
-  imports: [BrowserModule, AppRoutingModule, MaterialModule, BrowserAnimationsModule, LeafletModule, HttpClientModule],
+  declarations: [AppComponent, HeaderComponent, SidenavComponent, EventsComponent, AddEventComponent],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    MaterialModule,
+    BrowserAnimationsModule,
+    LeafletModule,
+    HttpClientModule,
+    ReactiveFormsModule
+  ],
   providers: [],
   bootstrap: [AppComponent]
 })
