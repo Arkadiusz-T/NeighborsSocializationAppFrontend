@@ -2,7 +2,7 @@
   <h1 class="col-offset-1 my-5">Wydarzenia</h1>
 
   <div class="grid mt-2 mx-0">
-    <div id="map" class="col-offset-1 col-10" leaflet [leafletOptions]="options">
+    <div id="map" class="col-offset-1 col-10" leaflet [leafletOptions]="options" (leafletMapReady)="onMapReady($event)">
       <div *ngFor="let layer of layers" [leafletLayer]="layer"></div>
     </div>
   </div>

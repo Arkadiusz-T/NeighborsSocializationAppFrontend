@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 export class AddEventService {
   constructor(private http: HttpClient) {}
 
-  add(addEventModel: AddEventModel): Observable<void> {
-    return this.http.post<void>(environment.apiUrl + '/events', addEventModel);
+  add(addEventModel: AddEventModel): Observable<string> {
+    return this.http.post<string>(environment.apiUrl + '/events', addEventModel);
   }
 }

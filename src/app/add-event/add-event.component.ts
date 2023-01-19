@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AddEventService } from './add-event.service';
-import { Icon, icon, latLng, Layer, LeafletMouseEvent, MapOptions, marker, tileLayer } from 'leaflet';
+import { Icon, icon, LatLng, latLng, Layer, LeafletMouseEvent, Map, MapOptions, marker, tileLayer } from 'leaflet';
 import { Router } from '@angular/router';
+import { map, take } from 'rxjs';
+import { GeolocationService } from '@ng-web-apis/geolocation';
 
 @Component({
   selector: 'app-add-event',
@@ -31,7 +33,11 @@ export class AddEventComponent {
 
   layer: Layer | undefined;
 
-  constructor(private addEventService: AddEventService, private router: Router) {}
+  constructor(
+    private addEventService: AddEventService,
+    private router: Router,
+    private geolocationService: GeolocationService
+  ) {}
 
   onMapClick(event: LeafletMouseEvent): void {
     this.addEventForm.patchValue({
@@ -65,5 +71,16 @@ export class AddEventComponent {
     date.setHours(+this.addEventForm.value.time!.substring(0, 2));
     date.setMinutes(+this.addEventForm.value.time!.substring(3, 5));
     return date;
+  }
+
+  onMapReady(leafletMap: Map) {
+    this.geolocationService
+      .pipe(
+        take(1),
+        map((position: GeolocationPosition) => {
+          return latLng(position.coords.latitude, position.coords.longitude);
+        })
+      )
+      .subscribe((latLng: LatLng) => leafletMap.panTo(latLng));
   }
 }
