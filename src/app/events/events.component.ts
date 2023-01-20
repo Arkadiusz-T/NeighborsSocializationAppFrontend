@@ -1,5 +1,18 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { icon, Icon, latLng, Layer, MapOptions, marker, Map, tileLayer, LatLng } from 'leaflet';
+import {
+  icon,
+  Icon,
+  latLng,
+  Layer,
+  MapOptions,
+  marker,
+  Map,
+  tileLayer,
+  LatLng,
+  Control,
+  DomUtil,
+  DomEvent
+} from 'leaflet';
 import { EventsService } from './events.service';
 import { map, Subscription, take } from 'rxjs';
 import { EventReadModel } from './event.model';
@@ -33,7 +46,6 @@ export class EventsComponent implements OnInit, OnDestroy {
       const events = this.eventsService.getEvents();
       this.addMarkersToMap(events);
     });
-    this.eventsService.fetchAllEvents();
   }
 
   private addMarkersToMap(events: EventReadModel[]) {
@@ -71,6 +83,41 @@ export class EventsComponent implements OnInit, OnDestroy {
           return latLng(position.coords.latitude, position.coords.longitude);
         })
       )
-      .subscribe((latLng: LatLng) => leafletMap.panTo(latLng));
+      .subscribe((latLng: LatLng) => {
+        leafletMap.panTo(latLng);
+        this.eventsService.searchEvents(latLng, 5);
+
+        this.addSearchHereControl(leafletMap);
+      });
+  }
+
+  private addSearchHereControl(leafletMap: Map) {
+    const searchHereControl = new Control({
+      position: 'topright'
+    });
+    searchHereControl.onAdd = () => {
+      const div: HTMLDivElement = DomUtil.create('div');
+      div.innerHTML = `
+        <button style='padding: 8px;
+                       cursor: pointer;
+                       background-color: white;
+                       border: 2px solid #AAA;'
+                onMouseOver='this.style["background-color"]="#F4F4F4"'
+                onMouseOut="this.style['background-color']='white'">
+          <div style='display: inline-block;
+                      background-size: 20px;
+                      background-image: url("assets/search_icon.svg");
+                      width: 20px;
+                      height: 20px;
+                      margin-bottom: -4px'>
+          </div>
+          <span style='font-size: 15px'>Szukaj w tym obszarze</span>
+        </button>`;
+      DomEvent.on(div, 'click', () => {
+        this.eventsService.searchEvents(leafletMap.getCenter(), 5);
+      });
+      return div;
+    };
+    leafletMap.addControl(searchHereControl);
   }
 }
