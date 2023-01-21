@@ -13,6 +13,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   styleUrls: ['./add-event.component.scss']
 })
 export class AddEventComponent {
+  minDate = new Date();
+
   options: MapOptions = {
     layers: [
       tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {

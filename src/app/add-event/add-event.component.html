@@ -12,7 +12,7 @@
     <div class="col-4">
       <mat-form-field>
         <mat-label>Data wydarzenia</mat-label>
-        <input matInput [matDatepicker]="datePicker" formControlName="date" />
+        <input matInput [matDatepicker]="datePicker" formControlName="date" [min]="minDate" />
         <mat-hint>MM/DD/YYYY</mat-hint>
         <mat-datepicker-toggle matIconSuffix [for]="datePicker"></mat-datepicker-toggle>
         <mat-datepicker #datePicker></mat-datepicker>

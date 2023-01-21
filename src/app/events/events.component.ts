@@ -39,6 +39,8 @@ export class EventsComponent implements OnInit, OnDestroy {
   endDateFormControl = new FormControl<Date | null>(null);
   categoryFormControl = new FormControl<string | null>(null);
 
+  private readonly defaultCenter = latLng(51.12788, 16.982566);
+
   options: MapOptions = {
     layers: [
       tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -48,10 +50,12 @@ export class EventsComponent implements OnInit, OnDestroy {
       })
     ],
     zoom: 15,
-    center: latLng(51.12788, 16.982566)
+    center: this.defaultCenter
   };
 
-  constructor(private eventsService: EventsService, private geolocationService: GeolocationService) {}
+  constructor(private eventsService: EventsService, private geolocationService: GeolocationService) {
+    this.defaultCenter = latLng(51.12788, 16.982566);
+  }
 
   ngOnInit(): void {
     this.eventsChangedSubscription = this.eventsService.eventsChanged.subscribe(() => {
@@ -96,13 +100,23 @@ export class EventsComponent implements OnInit, OnDestroy {
           return latLng(position.coords.latitude, position.coords.longitude);
         })
       )
-      .subscribe((latLng: LatLng) => {
-        leafletMap.panTo(latLng);
-        const radiusInMeters = this.calculateRadiusInMeters(leafletMap.getZoom());
-        this.eventsService.searchEvents(latLng, radiusInMeters);
-        this.addCircleLayer(latLng, radiusInMeters);
+      .subscribe({
+        next: (latLng: LatLng) => {
+          leafletMap.panTo(latLng);
+          const radiusInMeters = EventsComponent.calculateRadiusInMeters(leafletMap.getZoom());
+          this.eventsService.searchEvents(latLng, radiusInMeters);
+          this.addCircleLayer(latLng, radiusInMeters);
 
-        this.addSearchHereControl(leafletMap);
+          this.addSearchHereControl(leafletMap);
+        },
+        error: () => {
+          leafletMap.panTo(this.defaultCenter);
+          const radiusInMeters = EventsComponent.calculateRadiusInMeters(leafletMap.getZoom());
+          this.eventsService.searchEvents(this.defaultCenter, radiusInMeters);
+          this.addCircleLayer(this.defaultCenter, radiusInMeters);
+
+          this.addSearchHereControl(leafletMap);
+        }
       });
   }
 
@@ -130,7 +144,7 @@ export class EventsComponent implements OnInit, OnDestroy {
           <span style='font-size: 15px'>Szukaj w tym obszarze</span>
         </button>`;
       DomEvent.on(div, 'click', () => {
-        const radiusInMeters = this.calculateRadiusInMeters(leafletMap.getZoom());
+        const radiusInMeters = EventsComponent.calculateRadiusInMeters(leafletMap.getZoom());
         this.eventsService.searchEvents(leafletMap.getCenter(), radiusInMeters);
         this.addCircleLayer(leafletMap.getCenter(), radiusInMeters);
       });
@@ -149,7 +163,7 @@ export class EventsComponent implements OnInit, OnDestroy {
     });
   }
 
-  private calculateRadiusInMeters(zoom: number): number {
+  private static calculateRadiusInMeters(zoom: number): number {
     const zoomToRadiusInMeters = new Map()
       .set(18, 100)
       .set(17, 250)
@@ -162,11 +176,8 @@ export class EventsComponent implements OnInit, OnDestroy {
   }
 
   applyFilters(): void {
-    console.log(this.startDateFormControl.value);
-    console.log(this.endDateFormControl.value);
-    console.log(this.categoryFormControl.value);
     if (this.leafletMap) {
-      const radiusInMeters = this.calculateRadiusInMeters(this.leafletMap.getZoom());
+      const radiusInMeters = EventsComponent.calculateRadiusInMeters(this.leafletMap.getZoom());
       this.eventsService.searchEvents(this.leafletMap.getCenter(), radiusInMeters, {
         startDate: this.startDateFormControl.value,
         endDate: this.endDateFormControl.value,
@@ -181,7 +192,7 @@ export class EventsComponent implements OnInit, OnDestroy {
     this.endDateFormControl.patchValue(null);
     this.categoryFormControl.patchValue(null);
     if (this.leafletMap) {
-      const radiusInMeters = this.calculateRadiusInMeters(this.leafletMap.getZoom());
+      const radiusInMeters = EventsComponent.calculateRadiusInMeters(this.leafletMap.getZoom());
       this.eventsService.searchEvents(this.leafletMap.getCenter(), radiusInMeters);
       this.addCircleLayer(this.leafletMap.getCenter(), radiusInMeters);
     }
