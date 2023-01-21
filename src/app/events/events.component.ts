@@ -151,13 +151,13 @@ export class EventsComponent implements OnInit, OnDestroy {
 
   private calculateRadiusInMeters(zoom: number): number {
     const zoomToRadiusInMeters = new Map()
-      .set(18, 150)
-      .set(17, 300)
-      .set(16, 550)
-      .set(15, 1100)
-      .set(14, 2200)
-      .set(13, 4300)
-      .set(12, 6400);
+      .set(18, 100)
+      .set(17, 250)
+      .set(16, 400)
+      .set(15, 700)
+      .set(14, 1800)
+      .set(13, 3800)
+      .set(12, 5500);
     return zoomToRadiusInMeters.get(zoom);
   }
 
