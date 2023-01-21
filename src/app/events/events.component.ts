@@ -145,11 +145,11 @@ export class EventsComponent implements OnInit, OnDestroy {
     const zoomToRadiusInMeters = new Map()
       .set(18, 150)
       .set(17, 300)
-      .set(16, 500)
-      .set(15, 1000)
-      .set(14, 2000)
-      .set(13, 4000)
-      .set(12, 6000);
+      .set(16, 550)
+      .set(15, 1100)
+      .set(14, 2200)
+      .set(13, 4300)
+      .set(12, 6400);
     return zoomToRadiusInMeters.get(zoom);
   }
 }
