@@ -30,6 +30,9 @@ export class EventsComponent implements OnInit, OnDestroy {
   layers: Layer[] = [];
   circleLayer: Layer | undefined;
 
+  categories: string[] = ['Rower', 'Rolki', 'Spacer', 'Wyjście z psem', 'Inne'];
+  minDate = new Date();
+
   options: MapOptions = {
     layers: [
       tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {

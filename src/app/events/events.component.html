@@ -1,10 +1,44 @@
-<section>
-  <h1 class="col-offset-1 my-5">Wydarzenia</h1>
+<section class="grid mx-0 my-5">
+  <h1 class="col-offset-1 col-2">Wydarzenia</h1>
+  <div class="col-2">
+    <mat-form-field appearance="fill">
+      <mat-label>Data wydarzenia</mat-label>
+      <mat-date-range-input [rangePicker]="picker //noinspection ValidateTypes" [min]="minDate">
+        <input matStartDate />
+        <input matEndDate />
+      </mat-date-range-input>
+      <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-date-range-picker #picker></mat-date-range-picker>
+    </mat-form-field>
+  </div>
+  <div class="col-2">
+    <mat-form-field appearance="fill">
+      <mat-label>Kategoria</mat-label>
+      <mat-select>
+        <mat-option *ngFor="let category of categories" [value]="category">
+          {{ category }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <div class="col-3 mt-2">
+    <button mat-raised-button color="primary" class="mx-2">
+      <mat-icon>find_in_page</mat-icon>
+      Zastosuj filtry
+    </button>
+    <button mat-raised-button color="warn">
+      <mat-icon>clear</mat-icon>
+      Wyczyść filtry
+    </button>
+  </div>
 
-  <div class="grid mt-2 mx-0">
-    <div id="map" class="col-offset-1 col-10" leaflet [leafletOptions]="options" (leafletMapReady)="onMapReady($event)">
-      <div *ngFor="let layer of layers" [leafletLayer]="layer"></div>
-      <div *ngIf="circleLayer" [leafletLayer]="circleLayer"></div>
-    </div>
+  <div
+    id="map"
+    class="col-offset-1 col-10 mt-2"
+    leaflet
+    [leafletOptions]="options"
+    (leafletMapReady)="onMapReady($event)">
+    <div *ngFor="let layer of layers" [leafletLayer]="layer"></div>
+    <div *ngIf="circleLayer" [leafletLayer]="circleLayer"></div>
   </div>
 </section>
