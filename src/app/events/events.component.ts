@@ -137,8 +137,6 @@ export class EventsComponent implements OnInit, OnDestroy {
       weight: 1,
       radius: radiusInMeters
     });
-    console.log(latLng);
-    console.log(latLng.lat);
   }
 
   private calculateRadiusInMeters(zoom: number): number {

@@ -5,6 +5,7 @@ import { Icon, icon, LatLng, latLng, Layer, LeafletMouseEvent, Map, MapOptions, 
 import { Router } from '@angular/router';
 import { map, take } from 'rxjs';
 import { GeolocationService } from '@ng-web-apis/geolocation';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-add-event',
@@ -37,7 +38,8 @@ export class AddEventComponent {
   constructor(
     private addEventService: AddEventService,
     private router: Router,
-    private geolocationService: GeolocationService
+    private geolocationService: GeolocationService,
+    private snackBar: MatSnackBar
   ) {}
 
   onMapClick(event: LeafletMouseEvent): void {
@@ -65,6 +67,11 @@ export class AddEventComponent {
         duration: this.addEventForm.value.duration!
       })
       .subscribe(() => {
+        this.snackBar.open('Dodano wydarzenie!', 'OK', {
+          horizontalPosition: 'center',
+          verticalPosition: 'top',
+          duration: 3_000
+        });
         this.router.navigate(['/events']);
       });
   }
