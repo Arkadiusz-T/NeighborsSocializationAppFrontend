@@ -10,3 +10,12 @@ export interface Position {
   x: number; // longitude
   y: number; // latitude
 }
+
+export interface SearchEventsParams {
+  latitude: number;
+  longitude: number;
+  distanceInMeters: number;
+  startDate?: string;
+  endDate?: string;
+  category?: string;
+}

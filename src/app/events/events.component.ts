@@ -18,6 +18,7 @@ import { EventsService } from './events.service';
 import { map, Subscription, take } from 'rxjs';
 import { EventReadModel } from './event.model';
 import { GeolocationService } from '@ng-web-apis/geolocation';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-events',
@@ -27,11 +28,16 @@ import { GeolocationService } from '@ng-web-apis/geolocation';
 export class EventsComponent implements OnInit, OnDestroy {
   private eventsChangedSubscription!: Subscription;
 
+  leafletMap: LeafletMap | undefined;
   layers: Layer[] = [];
   circleLayer: Layer | undefined;
 
   categories: string[] = ['Rower', 'Rolki', 'Spacer', 'Wyjście z psem', 'Inne'];
   minDate = new Date();
+
+  startDateFormControl = new FormControl<Date | null>(null);
+  endDateFormControl = new FormControl<Date | null>(null);
+  categoryFormControl = new FormControl<string | null>(null);
 
   options: MapOptions = {
     layers: [
@@ -82,6 +88,7 @@ export class EventsComponent implements OnInit, OnDestroy {
   }
 
   onMapReady(leafletMap: LeafletMap) {
+    this.leafletMap = leafletMap;
     this.geolocationService
       .pipe(
         take(1),
@@ -152,5 +159,31 @@ export class EventsComponent implements OnInit, OnDestroy {
       .set(13, 4300)
       .set(12, 6400);
     return zoomToRadiusInMeters.get(zoom);
+  }
+
+  applyFilters(): void {
+    console.log(this.startDateFormControl.value);
+    console.log(this.endDateFormControl.value);
+    console.log(this.categoryFormControl.value);
+    if (this.leafletMap) {
+      const radiusInMeters = this.calculateRadiusInMeters(this.leafletMap.getZoom());
+      this.eventsService.searchEvents(this.leafletMap.getCenter(), radiusInMeters, {
+        startDate: this.startDateFormControl.value,
+        endDate: this.endDateFormControl.value,
+        category: this.categoryFormControl.value
+      });
+      this.addCircleLayer(this.leafletMap.getCenter(), radiusInMeters);
+    }
+  }
+
+  resetFilters(): void {
+    this.startDateFormControl.patchValue(null);
+    this.endDateFormControl.patchValue(null);
+    this.categoryFormControl.patchValue(null);
+    if (this.leafletMap) {
+      const radiusInMeters = this.calculateRadiusInMeters(this.leafletMap.getZoom());
+      this.eventsService.searchEvents(this.leafletMap.getCenter(), radiusInMeters);
+      this.addCircleLayer(this.leafletMap.getCenter(), radiusInMeters);
+    }
   }
 }

@@ -4,8 +4,8 @@
     <mat-form-field appearance="fill">
       <mat-label>Data wydarzenia</mat-label>
       <mat-date-range-input [rangePicker]="picker //noinspection ValidateTypes" [min]="minDate">
-        <input matStartDate />
-        <input matEndDate />
+        <input matStartDate [formControl]="startDateFormControl" />
+        <input matEndDate [formControl]="endDateFormControl" />
       </mat-date-range-input>
       <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
       <mat-date-range-picker #picker></mat-date-range-picker>
@@ -14,7 +14,7 @@
   <div class="col-2">
     <mat-form-field appearance="fill">
       <mat-label>Kategoria</mat-label>
-      <mat-select>
+      <mat-select [formControl]="categoryFormControl">
         <mat-option *ngFor="let category of categories" [value]="category">
           {{ category }}
         </mat-option>
@@ -22,11 +22,11 @@
     </mat-form-field>
   </div>
   <div class="col-3 mt-2">
-    <button mat-raised-button color="primary" class="mx-2">
+    <button mat-raised-button color="primary" class="mx-2" type="button" (click)="applyFilters()">
       <mat-icon>find_in_page</mat-icon>
       Zastosuj filtry
     </button>
-    <button mat-raised-button color="warn">
+    <button mat-raised-button color="warn" type="reset" (click)="resetFilters()">
       <mat-icon>clear</mat-icon>
       Wyczyść filtry
     </button>
