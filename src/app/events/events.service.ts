@@ -13,10 +13,10 @@ export class EventsService {
 
   constructor(private http: HttpClient) {}
 
-  searchEvents(latLng: LatLng, distanceInKilometers: number): void {
+  searchEvents(latLng: LatLng, distanceInMeters: number): void {
     this.http
       .get<EventReadModel[]>(environment.apiUrl + '/events/search', {
-        params: { x: latLng.lat, y: latLng.lng, distanceInKilometers }
+        params: { latitude: latLng.lat, longitude: latLng.lng, distanceInMeters }
       })
       .subscribe((events: EventReadModel[]) => {
         this.events = events;

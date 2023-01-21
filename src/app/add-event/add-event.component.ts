@@ -28,7 +28,8 @@ export class AddEventComponent {
     date: new FormControl('', Validators.required),
     time: new FormControl('', Validators.required),
     duration: new FormControl(null, Validators.required),
-    position: new FormControl<number[] | null>(null, Validators.required)
+    latitude: new FormControl<number | null>(null, Validators.required),
+    longitude: new FormControl<number | null>(null, Validators.required)
   });
 
   layer: Layer | undefined;
@@ -41,7 +42,8 @@ export class AddEventComponent {
 
   onMapClick(event: LeafletMouseEvent): void {
     this.addEventForm.patchValue({
-      position: [event.latlng.lat, event.latlng.lng]
+      latitude: event.latlng.lat,
+      longitude: event.latlng.lng
     });
     this.layer = marker(latLng(event.latlng.lat, event.latlng.lng), {
       icon: icon({
@@ -56,7 +58,8 @@ export class AddEventComponent {
   onSubmit(): void {
     this.addEventService
       .add({
-        position: this.addEventForm.value.position!,
+        latitude: this.addEventForm.value.latitude!,
+        longitude: this.addEventForm.value.longitude!,
         name: this.addEventForm.value.name!,
         dateTime: this.getDate(),
         duration: this.addEventForm.value.duration!

@@ -1,5 +1,6 @@
 export interface AddEventModel {
-  position: number[];
+  latitude: number;
+  longitude: number;
   name: string;
   dateTime: Date;
   duration: number;

@@ -6,12 +6,13 @@ import {
   Layer,
   MapOptions,
   marker,
-  Map,
+  Map as LeafletMap,
   tileLayer,
   LatLng,
   Control,
   DomUtil,
-  DomEvent
+  DomEvent,
+  circle
 } from 'leaflet';
 import { EventsService } from './events.service';
 import { map, Subscription, take } from 'rxjs';
@@ -27,10 +28,12 @@ export class EventsComponent implements OnInit, OnDestroy {
   private eventsChangedSubscription!: Subscription;
 
   layers: Layer[] = [];
+  circleLayer: Layer | undefined;
 
   options: MapOptions = {
     layers: [
       tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        minZoom: 12,
         maxZoom: 18,
         attribution: '© OpenStreetMap contributors'
       })
@@ -60,7 +63,7 @@ export class EventsComponent implements OnInit, OnDestroy {
         minute: '2-digit'
       });
 
-      return marker(latLng(event.position[0], event.position[1]), {
+      return marker(latLng(event.position.y, event.position.x), {
         icon: icon({
           ...Icon.Default.prototype.options,
           iconUrl: 'assets/marker-icon.png',
@@ -75,7 +78,7 @@ export class EventsComponent implements OnInit, OnDestroy {
     this.eventsChangedSubscription.unsubscribe();
   }
 
-  onMapReady(leafletMap: Map) {
+  onMapReady(leafletMap: LeafletMap) {
     this.geolocationService
       .pipe(
         take(1),
@@ -85,18 +88,21 @@ export class EventsComponent implements OnInit, OnDestroy {
       )
       .subscribe((latLng: LatLng) => {
         leafletMap.panTo(latLng);
-        this.eventsService.searchEvents(latLng, 5);
+        const radiusInMeters = this.calculateRadiusInMeters(leafletMap.getZoom());
+        this.eventsService.searchEvents(latLng, radiusInMeters);
+        this.addCircleLayer(latLng, radiusInMeters);
 
         this.addSearchHereControl(leafletMap);
       });
   }
 
-  private addSearchHereControl(leafletMap: Map) {
+  private addSearchHereControl(leafletMap: LeafletMap) {
     const searchHereControl = new Control({
       position: 'topright'
     });
     searchHereControl.onAdd = () => {
       const div: HTMLDivElement = DomUtil.create('div');
+      // noinspection CssUnknownTarget
       div.innerHTML = `
         <button style='padding: 8px;
                        cursor: pointer;
@@ -114,10 +120,36 @@ export class EventsComponent implements OnInit, OnDestroy {
           <span style='font-size: 15px'>Szukaj w tym obszarze</span>
         </button>`;
       DomEvent.on(div, 'click', () => {
-        this.eventsService.searchEvents(leafletMap.getCenter(), 5);
+        const radiusInMeters = this.calculateRadiusInMeters(leafletMap.getZoom());
+        this.eventsService.searchEvents(leafletMap.getCenter(), radiusInMeters);
+        this.addCircleLayer(leafletMap.getCenter(), radiusInMeters);
       });
       return div;
     };
     leafletMap.addControl(searchHereControl);
+  }
+
+  private addCircleLayer(latLng: LatLng, radiusInMeters: number): void {
+    this.circleLayer = circle(latLng, {
+      color: 'red',
+      fillColor: '#f03',
+      fillOpacity: 0.05,
+      weight: 1,
+      radius: radiusInMeters
+    });
+    console.log(latLng);
+    console.log(latLng.lat);
+  }
+
+  private calculateRadiusInMeters(zoom: number): number {
+    const zoomToRadiusInMeters = new Map()
+      .set(18, 150)
+      .set(17, 300)
+      .set(16, 500)
+      .set(15, 1000)
+      .set(14, 2000)
+      .set(13, 4000)
+      .set(12, 6000);
+    return zoomToRadiusInMeters.get(zoom);
   }
 }
