@@ -102,7 +102,7 @@ export class EventsComponent implements OnInit, OnDestroy {
           leafletMap.panTo(latLng);
           this.center = latLng;
           this.updateMapState();
-          const radiusInMeters = this.calculateRadiusInMeters(leafletMap.getZoom());
+          const radiusInMeters = EventsComponent.calculateRadiusInMeters(leafletMap.getZoom());
           this.eventsService.searchEvents(latLng, radiusInMeters);
           this.addCircleLayer(latLng, radiusInMeters);
 
@@ -174,7 +174,7 @@ export class EventsComponent implements OnInit, OnDestroy {
 
   private updateMapState(): void {
     if (this.leafletMap) {
-      const radiusInMeters = this.calculateRadiusInMeters(this.leafletMap.getZoom());
+      const radiusInMeters = EventsComponent.calculateRadiusInMeters(this.leafletMap.getZoom());
       this.eventsService.searchEvents(this.center, radiusInMeters, {
         startDate: this.startDateFormControl.value,
         endDate: this.endDateFormControl.value,
