@@ -32,6 +32,7 @@ export class EventsComponent implements OnInit, OnDestroy {
   layers: Layer[] = [];
   circleLayer: Layer | undefined;
   center: LatLng = latLng(51.12788, 16.982566);
+  zoom = 15;
 
   categories: string[] = ['Rower', 'Rolki', 'Spacer', 'Wyjście z psem', 'Inne'];
   minDate = new Date();
@@ -48,7 +49,7 @@ export class EventsComponent implements OnInit, OnDestroy {
         attribution: '© OpenStreetMap contributors'
       })
     ],
-    zoom: 15,
+    zoom: this.zoom,
     center: this.center
   };
 
@@ -102,7 +103,7 @@ export class EventsComponent implements OnInit, OnDestroy {
           leafletMap.panTo(latLng);
           this.center = latLng;
           this.updateMapState();
-          const radiusInMeters = EventsComponent.calculateRadiusInMeters(leafletMap.getZoom());
+          const radiusInMeters = this.calculateRadiusInMeters();
           this.eventsService.searchEvents(latLng, radiusInMeters);
           this.addCircleLayer(latLng, radiusInMeters);
 
@@ -110,7 +111,7 @@ export class EventsComponent implements OnInit, OnDestroy {
         },
         error: () => {
           leafletMap.panTo(this.center);
-          const radiusInMeters = EventsComponent.calculateRadiusInMeters(leafletMap.getZoom());
+          const radiusInMeters = this.calculateRadiusInMeters();
           this.eventsService.searchEvents(this.center, radiusInMeters);
           this.addCircleLayer(this.center, radiusInMeters);
 
@@ -144,6 +145,7 @@ export class EventsComponent implements OnInit, OnDestroy {
         </button>`;
       DomEvent.on(div, 'click', () => {
         this.center = leafletMap.getCenter();
+        this.zoom = leafletMap.getZoom();
         this.updateMapState();
       });
       return div;
@@ -174,7 +176,7 @@ export class EventsComponent implements OnInit, OnDestroy {
 
   private updateMapState(): void {
     if (this.leafletMap) {
-      const radiusInMeters = EventsComponent.calculateRadiusInMeters(this.leafletMap.getZoom());
+      const radiusInMeters = this.calculateRadiusInMeters();
       this.eventsService.searchEvents(this.center, radiusInMeters, {
         startDate: this.startDateFormControl.value,
         endDate: this.endDateFormControl.value,
@@ -184,7 +186,7 @@ export class EventsComponent implements OnInit, OnDestroy {
     }
   }
 
-  private static calculateRadiusInMeters(zoom: number): number {
+  private calculateRadiusInMeters(): number {
     const zoomToRadiusInMeters = new Map()
       .set(18, 100)
       .set(17, 250)
@@ -193,6 +195,6 @@ export class EventsComponent implements OnInit, OnDestroy {
       .set(14, 1800)
       .set(13, 3800)
       .set(12, 5500);
-    return zoomToRadiusInMeters.get(zoom);
+    return zoomToRadiusInMeters.get(this.zoom);
   }
 }

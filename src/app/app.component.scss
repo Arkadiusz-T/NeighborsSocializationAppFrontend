@@ -5,9 +5,8 @@ main {
   min-height: 100%;
 }
 
-mat-sidenav-content {
+div.wrapper {
   min-height: 100vh;
-  padding-bottom: 50px;
 }
 
 mat-sidenav {
@@ -21,4 +20,5 @@ mat-sidenav {
   bottom: 0;
   height: 30px;
   text-align: center;
+  padding-top: 8px;
 }

@@ -1,6 +1,5 @@
-<section class="grid mx-0 my-5">
-  <h1 class="col-offset-1 col-2">Wydarzenia</h1>
-  <div class="col-3">
+<section class="grid mx-0 mt-3 my-4">
+  <div class="col-offset-3 col-2 py-0">
     <mat-form-field appearance="fill">
       <mat-label>Data wydarzenia</mat-label>
       <mat-date-range-input [rangePicker]="picker //noinspection ValidateTypes" [min]="minDate">
@@ -11,7 +10,7 @@
       <mat-date-range-picker #picker></mat-date-range-picker>
     </mat-form-field>
   </div>
-  <div class="col-2">
+  <div class="col-2 py-0">
     <mat-form-field appearance="fill">
       <mat-label>Kategoria</mat-label>
       <mat-select [formControl]="categoryFormControl">
@@ -21,7 +20,7 @@
       </mat-select>
     </mat-form-field>
   </div>
-  <div class="col-3 mt-2">
+  <div class="col-3 mt-2 py-0">
     <button mat-raised-button color="primary" class="mx-2" type="button" (click)="applyFilters()">
       <mat-icon>find_in_page</mat-icon>
       Zastosuj filtry
@@ -32,13 +31,10 @@
     </button>
   </div>
 
-  <div
-    id="map"
-    class="col-offset-1 col-10 mt-2"
-    leaflet
-    [leafletOptions]="options"
-    (leafletMapReady)="onMapReady($event)">
-    <div *ngFor="let layer of layers" [leafletLayer]="layer"></div>
-    <div *ngIf="circleLayer" [leafletLayer]="circleLayer"></div>
+  <div class="col-12 px-4 pt-0">
+    <div id="map" leaflet [leafletOptions]="options" (leafletMapReady)="onMapReady($event)">
+      <div *ngFor="let layer of layers" [leafletLayer]="layer"></div>
+      <div *ngIf="circleLayer" [leafletLayer]="circleLayer"></div>
+    </div>
   </div>
 </section>

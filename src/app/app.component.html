@@ -1,12 +1,14 @@
-<mat-sidenav-container>
-  <mat-sidenav #sidenav role="navigation">
-    <app-sidenav (closeSidenav)="sidenav.close()"></app-sidenav>
-  </mat-sidenav>
-  <mat-sidenav-content>
-    <app-header (sidenavToggle)="sidenav.toggle()"></app-header>
-    <main>
-      <router-outlet></router-outlet>
-    </main>
-    <footer class="footer">© 2023 Neighbours Socializer</footer>
-  </mat-sidenav-content>
-</mat-sidenav-container>
+<div class="wrapper">
+  <app-header (sidenavToggle)="sidenav.toggle()"></app-header>
+  <mat-sidenav-container>
+    <mat-sidenav #sidenav role="navigation">
+      <app-sidenav (closeSidenav)="sidenav.close()"></app-sidenav>
+    </mat-sidenav>
+    <mat-sidenav-content>
+      <main>
+        <router-outlet></router-outlet>
+      </main>
+      <footer class="footer">© 2023 We are locals</footer>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</div>
