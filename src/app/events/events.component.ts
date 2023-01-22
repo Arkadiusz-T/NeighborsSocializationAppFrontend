@@ -184,7 +184,7 @@ export class EventsComponent implements OnInit, OnDestroy {
     }
   }
 
-  private calculateRadiusInMeters(zoom: number): number {
+  private static calculateRadiusInMeters(zoom: number): number {
     const zoomToRadiusInMeters = new Map()
       .set(18, 100)
       .set(17, 250)
