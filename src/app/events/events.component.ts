@@ -31,6 +31,7 @@ export class EventsComponent implements OnInit, OnDestroy {
   leafletMap: LeafletMap | undefined;
   layers: Layer[] = [];
   circleLayer: Layer | undefined;
+  center: LatLng = latLng(51.12788, 16.982566);
 
   categories: string[] = ['Rower', 'Rolki', 'Spacer', 'Wyjście z psem', 'Inne'];
   minDate = new Date();
@@ -38,8 +39,6 @@ export class EventsComponent implements OnInit, OnDestroy {
   startDateFormControl = new FormControl<Date | null>(null);
   endDateFormControl = new FormControl<Date | null>(null);
   categoryFormControl = new FormControl<string | null>(null);
-
-  private readonly defaultCenter = latLng(51.12788, 16.982566);
 
   options: MapOptions = {
     layers: [
@@ -50,12 +49,10 @@ export class EventsComponent implements OnInit, OnDestroy {
       })
     ],
     zoom: 15,
-    center: this.defaultCenter
+    center: this.center
   };
 
-  constructor(private eventsService: EventsService, private geolocationService: GeolocationService) {
-    this.defaultCenter = latLng(51.12788, 16.982566);
-  }
+  constructor(private eventsService: EventsService, private geolocationService: GeolocationService) {}
 
   ngOnInit(): void {
     this.eventsChangedSubscription = this.eventsService.eventsChanged.subscribe(() => {
@@ -103,17 +100,19 @@ export class EventsComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (latLng: LatLng) => {
           leafletMap.panTo(latLng);
-          const radiusInMeters = EventsComponent.calculateRadiusInMeters(leafletMap.getZoom());
+          this.center = latLng;
+          this.updateMapState();
+          const radiusInMeters = this.calculateRadiusInMeters(leafletMap.getZoom());
           this.eventsService.searchEvents(latLng, radiusInMeters);
           this.addCircleLayer(latLng, radiusInMeters);
 
           this.addSearchHereControl(leafletMap);
         },
         error: () => {
-          leafletMap.panTo(this.defaultCenter);
+          leafletMap.panTo(this.center);
           const radiusInMeters = EventsComponent.calculateRadiusInMeters(leafletMap.getZoom());
-          this.eventsService.searchEvents(this.defaultCenter, radiusInMeters);
-          this.addCircleLayer(this.defaultCenter, radiusInMeters);
+          this.eventsService.searchEvents(this.center, radiusInMeters);
+          this.addCircleLayer(this.center, radiusInMeters);
 
           this.addSearchHereControl(leafletMap);
         }
@@ -144,9 +143,8 @@ export class EventsComponent implements OnInit, OnDestroy {
           <span style='font-size: 15px'>Szukaj w tym obszarze</span>
         </button>`;
       DomEvent.on(div, 'click', () => {
-        const radiusInMeters = EventsComponent.calculateRadiusInMeters(leafletMap.getZoom());
-        this.eventsService.searchEvents(leafletMap.getCenter(), radiusInMeters);
-        this.addCircleLayer(leafletMap.getCenter(), radiusInMeters);
+        this.center = leafletMap.getCenter();
+        this.updateMapState();
       });
       return div;
     };
@@ -163,7 +161,30 @@ export class EventsComponent implements OnInit, OnDestroy {
     });
   }
 
-  private static calculateRadiusInMeters(zoom: number): number {
+  applyFilters(): void {
+    this.updateMapState();
+  }
+
+  resetFilters(): void {
+    this.startDateFormControl.patchValue(null);
+    this.endDateFormControl.patchValue(null);
+    this.categoryFormControl.patchValue(null);
+    this.updateMapState();
+  }
+
+  private updateMapState(): void {
+    if (this.leafletMap) {
+      const radiusInMeters = this.calculateRadiusInMeters(this.leafletMap.getZoom());
+      this.eventsService.searchEvents(this.center, radiusInMeters, {
+        startDate: this.startDateFormControl.value,
+        endDate: this.endDateFormControl.value,
+        category: this.categoryFormControl.value
+      });
+      this.addCircleLayer(this.center, radiusInMeters);
+    }
+  }
+
+  private calculateRadiusInMeters(zoom: number): number {
     const zoomToRadiusInMeters = new Map()
       .set(18, 100)
       .set(17, 250)
@@ -173,28 +194,5 @@ export class EventsComponent implements OnInit, OnDestroy {
       .set(13, 3800)
       .set(12, 5500);
     return zoomToRadiusInMeters.get(zoom);
-  }
-
-  applyFilters(): void {
-    if (this.leafletMap) {
-      const radiusInMeters = EventsComponent.calculateRadiusInMeters(this.leafletMap.getZoom());
-      this.eventsService.searchEvents(this.leafletMap.getCenter(), radiusInMeters, {
-        startDate: this.startDateFormControl.value,
-        endDate: this.endDateFormControl.value,
-        category: this.categoryFormControl.value
-      });
-      this.addCircleLayer(this.leafletMap.getCenter(), radiusInMeters);
-    }
-  }
-
-  resetFilters(): void {
-    this.startDateFormControl.patchValue(null);
-    this.endDateFormControl.patchValue(null);
-    this.categoryFormControl.patchValue(null);
-    if (this.leafletMap) {
-      const radiusInMeters = EventsComponent.calculateRadiusInMeters(this.leafletMap.getZoom());
-      this.eventsService.searchEvents(this.leafletMap.getCenter(), radiusInMeters);
-      this.addCircleLayer(this.leafletMap.getCenter(), radiusInMeters);
-    }
   }
 }

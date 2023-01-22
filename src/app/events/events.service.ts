@@ -36,15 +36,20 @@ export class EventsService {
   ) {
     const params: SearchEventsParams = { latitude: latLng.lat, longitude: latLng.lng, distanceInMeters };
     if (filters?.startDate) {
-      params.startDate = filters.startDate.toISOString();
+      params.startDate = this.toIsoDate(filters.startDate);
     }
     if (filters?.endDate) {
-      params.endDate = filters.endDate.toISOString();
+      params.endDate = this.toIsoDate(filters.endDate);
     }
     if (filters?.category) {
       params.category = filters.category;
     }
     return params;
+  }
+
+  private toIsoDate(date: Date): string {
+    const utcDate = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+    return utcDate.toISOString().split('T')[0];
   }
 
   getEvents(): EventReadModel[] {
