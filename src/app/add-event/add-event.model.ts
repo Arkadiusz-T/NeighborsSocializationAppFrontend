@@ -4,4 +4,5 @@ export interface AddEventModel {
   name: string;
   dateTime: Date;
   duration: number;
+  category: string;
 }

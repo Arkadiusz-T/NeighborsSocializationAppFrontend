@@ -15,6 +15,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export class AddEventComponent {
   minDate = new Date();
 
+  categories: string[] = ['Rower', 'Rolki', 'Spacer', 'Wyjście z psem', 'Inne'];
+
   options: MapOptions = {
     layers: [
       tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -32,7 +34,8 @@ export class AddEventComponent {
     time: new FormControl('', Validators.required),
     duration: new FormControl(null, Validators.required),
     latitude: new FormControl<number | null>(null, Validators.required),
-    longitude: new FormControl<number | null>(null, Validators.required)
+    longitude: new FormControl<number | null>(null, Validators.required),
+    category: new FormControl<string | null>(null, Validators.required)
   });
 
   layer: Layer | undefined;
@@ -66,7 +69,8 @@ export class AddEventComponent {
         longitude: this.addEventForm.value.longitude!,
         name: this.addEventForm.value.name!,
         dateTime: this.getDate(),
-        duration: this.addEventForm.value.duration!
+        duration: this.addEventForm.value.duration!,
+        category: this.addEventForm.value.category!
       })
       .subscribe(() => {
         this.snackBar.open('Dodano wydarzenie!', 'OK', {
