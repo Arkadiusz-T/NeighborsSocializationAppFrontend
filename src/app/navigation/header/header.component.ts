@@ -1,4 +1,5 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { KeycloakService } from 'keycloak-angular';
 
 @Component({
   selector: 'app-header',
@@ -7,14 +8,23 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 })
 export class HeaderComponent implements OnInit {
   @Output() sidenavToggle = new EventEmitter<void>();
+  username?: string;
 
-  constructor() {}
+  constructor(private keycloakService: KeycloakService) {}
 
   ngOnInit(): void {
-    console.log();
+    this.username = this.keycloakService.getUsername();
   }
 
   onToggleSidenav(): void {
     this.sidenavToggle.emit();
+  }
+
+  async login(): Promise<void> {
+    await this.keycloakService.login();
+  }
+
+  async logout(): Promise<void> {
+    await this.keycloakService.logout();
   }
 }

@@ -1,6 +1,10 @@
 a {
   text-decoration: none;
   color: white;
+
+  &.app-name {
+    font-size: 26px;
+  }
 }
 
 a:hover,
@@ -14,4 +18,15 @@ a:active {
 
 .space {
   flex: 1 1 auto;
+}
+
+button {
+  font-size: 20px;
+  mat-icon.mat-icon {
+    height: 28px;
+    width: 28px;
+    font-size: 28px;
+    margin-top: 2px;
+    margin-right: 0;
+  }
 }
