@@ -4,6 +4,7 @@ export interface EventReadModel {
   name: string;
   dateTime: Date;
   duration: number;
+  category?: string;
 }
 
 export interface Position {

@@ -12,7 +12,8 @@ import {
   Control,
   DomUtil,
   DomEvent,
-  circle
+  circle,
+  PointTuple
 } from 'leaflet';
 import { EventsService } from './events.service';
 import { map, Subscription, take } from 'rxjs';
@@ -77,12 +78,42 @@ export class EventsComponent implements OnInit, OnDestroy {
       return marker(latLng(event.position.y, event.position.x), {
         icon: icon({
           ...Icon.Default.prototype.options,
-          iconUrl: 'assets/marker-icon.png',
-          iconRetinaUrl: 'assets/marker-icon-2x.png',
-          shadowUrl: 'assets/marker-shadow.png'
+          iconUrl: this.getIconUrl(event.category),
+          shadowUrl: 'assets/marker-shadow.png',
+          iconSize: this.getSize(event.category)
         })
       }).bindPopup(`<b>${event.name}</b><br>${formattedDate}<br>${duration} minut`);
     });
+  }
+
+  private getIconUrl(category?: string): string {
+    switch (category) {
+      case 'Rower':
+        return 'assets/bicycle_icon.png';
+      case 'Rolki':
+        return 'assets/rollerblades_icon.png';
+      case 'Spacer':
+        return 'assets/walk_icon.png';
+      case 'Wyjście z psem':
+        return 'assets/dog_icon.png';
+      default:
+        return 'assets/marker-icon.png';
+    }
+  }
+
+  private getSize(category?: string): PointTuple {
+    switch (category) {
+      case 'Rower':
+        return [55, 55];
+      case 'Rolki':
+        return [43, 43];
+      case 'Spacer':
+        return [35, 35];
+      case 'Wyjście z psem':
+        return [51, 51];
+      default:
+        return [25, 41];
+    }
   }
 
   ngOnDestroy(): void {
