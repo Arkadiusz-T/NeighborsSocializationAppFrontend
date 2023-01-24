@@ -1,3 +1,9 @@
+mat-nav-list {
+  min-height: calc(100vh - 64px);
+  display: flex;
+  flex-direction: column;
+}
+
 a {
   text-decoration: none;
   color: white;
@@ -11,5 +17,15 @@ a:active {
 .nav-caption {
   display: inline-block;
   padding-left: 6px;
+  font-size: 16px;
+}
+
+.space {
+  flex: 1 1 auto;
+}
+
+span.username {
+  display: inline-block;
+  margin: 16px auto;
   font-size: 16px;
 }

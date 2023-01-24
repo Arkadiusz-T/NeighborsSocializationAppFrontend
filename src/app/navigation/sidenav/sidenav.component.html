@@ -3,8 +3,21 @@
     <mat-icon>map</mat-icon>
     <span class="nav-caption">Wydarzenia</span>
   </a>
-  <a mat-list-item routerLink="/add-event" (click)="onClose()">
+  <a *ngIf="username" mat-list-item routerLink="/add-event" (click)="onClose()">
     <mat-icon>add</mat-icon>
     <span class="nav-caption">Dodaj wydarzenie</span>
   </a>
+  <mat-divider></mat-divider>
+  <span class="space"></span>
+  <span class="username">
+    {{ username }}
+  </span>
+  <button *ngIf="!username" mat-list-item routerLink="/login" (click)="login()">
+    <mat-icon>login</mat-icon>
+    Zaloguj
+  </button>
+  <button *ngIf="username" mat-list-item routerLink="/login" (click)="logout()">
+    <mat-icon>power_settings_new</mat-icon>
+    Wyloguj
+  </button>
 </mat-nav-list>

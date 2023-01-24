@@ -1,25 +1,26 @@
 <mat-toolbar color="primary">
-  <span class="sm:hidden">
+  <span class="md:hidden">
     <button mat-icon-button (click)="onToggleSidenav()">
       <mat-icon>menu</mat-icon>
     </button>
   </span>
+  <mat-icon class="hidden md:inline logo">people</mat-icon>
   <a routerLink="/" class="navigation-item app-name">We are Locals</a>
-  <a routerLink="/events" class="hidden sm:inline navigation-item">Wydarzenia</a>
-  <a *ngIf="username" routerLink="/add-event" class="hidden sm:inline navigation-item">Dodaj wydarzenie</a>
+  <a routerLink="/events" class="hidden md:inline navigation-item">Wydarzenia</a>
+  <a *ngIf="username" routerLink="/add-event" class="hidden md:inline navigation-item">Dodaj wydarzenie</a>
   <a
     *ngIf="!username"
     routerLink="/add-event"
-    class="hidden sm:inline navigation-item"
+    class="hidden md:inline navigation-item"
     matTooltip="Zaloguj się, aby dodać wydarzenie">
     Dodaj wydarzenie
   </a>
-  <span class="hidden sm:inline space"></span>
-  <span class="mr-4">{{ username }}</span>
+  <span class="hidden md:inline space"></span>
+  <span class="hidden md:inline mr-4">{{ username }}</span>
   <button
     *ngIf="!username"
     routerLink="/login"
-    class="hidden sm:inline"
+    class="hidden md:inline"
     (click)="login()"
     mat-raised-button
     color="accent">
@@ -29,7 +30,7 @@
   <button
     *ngIf="username"
     routerLink="/login"
-    class="hidden sm:inline"
+    class="hidden md:inline"
     (click)="logout()"
     mat-raised-button
     color="accent">

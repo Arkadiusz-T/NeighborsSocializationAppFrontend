@@ -1,4 +1,5 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { KeycloakService } from 'keycloak-angular';
 
 @Component({
   selector: 'app-sidenav',
@@ -7,11 +8,20 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 })
 export class SidenavComponent implements OnInit {
   @Output() closeSidenav = new EventEmitter<void>();
+  username?: string;
 
-  constructor() {}
+  constructor(private keycloakService: KeycloakService) {}
 
   ngOnInit(): void {
-    console.log();
+    this.username = this.keycloakService.getUsername();
+  }
+
+  async login(): Promise<void> {
+    await this.keycloakService.login();
+  }
+
+  async logout(): Promise<void> {
+    await this.keycloakService.logout();
   }
 
   onClose(): void {

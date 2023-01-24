@@ -6,7 +6,11 @@ main {
 }
 
 div.wrapper {
-  min-height: 100vh;
+  height: 100vh;
+}
+
+mat-sidenav-content {
+  min-height: calc(100vh - 64px);
 }
 
 mat-sidenav {
