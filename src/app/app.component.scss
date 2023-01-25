@@ -1,23 +1,17 @@
-mat-sidenav-container,
-mat-sidenav-content,
-mat-sidenav,
-main {
-  min-height: 100%;
-}
-
 div.wrapper {
-  height: 100vh;
+  min-height: 100vh;
 }
 
 mat-sidenav-content {
   min-height: calc(100vh - 64px);
+  overflow: hidden;
 }
 
 mat-sidenav {
   width: 250px;
 }
 
-.footer {
+footer {
   font-size: 12px;
   position: absolute;
   left: 0;
@@ -26,9 +20,4 @@ mat-sidenav {
   height: 30px;
   text-align: center;
   padding-top: 8px;
-
-  span {
-    padding-right: 30px;
-    padding-left: 30px;
-  }
 }
