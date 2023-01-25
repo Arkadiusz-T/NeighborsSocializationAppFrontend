@@ -22,6 +22,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { NgxMatTimepickerModule } from 'ngx-mat-timepicker';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatSliderModule } from '@angular/material/slider';
 
 @NgModule({
   imports: [
@@ -49,7 +50,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatDatepickerModule,
     MatNativeDateModule,
     NgxMatTimepickerModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatSliderModule
   ],
   exports: [
     MatToolbarModule,
@@ -76,7 +78,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatDatepickerModule,
     MatNativeDateModule,
     NgxMatTimepickerModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatSliderModule
   ]
 })
 export class MaterialModule {}

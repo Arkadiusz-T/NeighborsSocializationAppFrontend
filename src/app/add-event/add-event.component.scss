@@ -9,3 +9,13 @@ mat-form-field {
 button[type='submit'] {
   float: right;
 }
+
+.age {
+  margin: auto 0;
+}
+
+mat-slider {
+  width: calc(100% - 80px);
+  max-width: 600px;
+  margin-left: 20px;
+}

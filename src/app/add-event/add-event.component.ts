@@ -15,7 +15,17 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export class AddEventComponent {
   minDate = new Date();
 
-  categories: string[] = ['Rower', 'Rolki', 'Spacer', 'Wyjście z psem', 'Inne'];
+  categories: string[] = [
+    'Rower',
+    'Rolki',
+    'Spacer',
+    'Wyjście z psem',
+    'Siłownia',
+    'Planszówki',
+    'Spacer z dzieckiem w wózku',
+    'Inne'
+  ];
+  gender: string[] = ['Męska', 'Żeńska', 'Inna', 'Dowolna'];
 
   options: MapOptions = {
     layers: [

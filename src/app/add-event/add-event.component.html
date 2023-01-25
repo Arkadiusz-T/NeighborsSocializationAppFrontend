@@ -1,14 +1,14 @@
 <section>
-  <h1 class="col-offset-1 my-5">Dodaj wydarzenie</h1>
+  <h1 class="lg:col-offset-1 col my-3">Dodaj wydarzenie</h1>
 
   <form [formGroup]="addEventForm" class="grid mt-2 mx-0" (ngSubmit)="onSubmit()">
-    <div class="col-offset-2 col-4">
+    <div class="lg:col-offset-2 col-12 sm:col-6 lg:col-4">
       <mat-form-field>
         <mat-label>Nazwa wydarzenia</mat-label>
         <input matInput type="text" formControlName="name" />
       </mat-form-field>
     </div>
-    <div class="col-4">
+    <div class="col-12 sm:col-6 lg:col-4">
       <mat-form-field appearance="fill">
         <mat-label>Kategoria</mat-label>
         <mat-select formControlName="category">
@@ -19,7 +19,7 @@
       </mat-form-field>
     </div>
 
-    <div class="col-offset-2 col-3">
+    <div class="lg:col-offset-2 col-12 sm:col-4 lg:col-3">
       <mat-form-field>
         <mat-label>Data wydarzenia</mat-label>
         <input matInput [matDatepicker]="datePicker" formControlName="date" [min]="minDate" />
@@ -29,7 +29,7 @@
       </mat-form-field>
     </div>
 
-    <div class="col-3">
+    <div class="col-12 sm:col-4 lg:col-3">
       <mat-form-field>
         <mat-label>Czas wydarzenia</mat-label>
         <input
@@ -44,7 +44,7 @@
       <ngx-mat-timepicker #timePicker></ngx-mat-timepicker>
     </div>
 
-    <div class="col-2">
+    <div class="col-12 sm:col-4 lg:col-2">
       <mat-form-field>
         <mat-label>Czas trwania</mat-label>
         <input matInput type="number" formControlName="duration" />
@@ -52,7 +52,26 @@
       </mat-form-field>
     </div>
 
-    <div class="col-offset-2 col-8">
+    <div class="lg:col-offset-2 col-12 sm:col-7 lg:col-4 pl-3 age">
+      <label>Wiek:</label>
+      <mat-slider min="16" max="75" discrete>
+        <input value="22" matSliderStartThumb formControlName="minAge" />
+        <input value="46" matSliderEndThumb formControlName="maxAge" />
+      </mat-slider>
+    </div>
+
+    <div class="col-12 sm:col-5 lg:col-4">
+      <mat-form-field appearance="fill">
+        <mat-label>Płeć</mat-label>
+        <mat-select formControlName="sex">
+          <mat-option *ngFor="let sex of gender" [value]="sex">
+            {{ sex }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="lg:col-offset-2 col-12 lg:col-8">
       <div
         id="map"
         leaflet
@@ -63,7 +82,7 @@
       </div>
     </div>
 
-    <div class="col-offset-2 col-8">
+    <div class="col-offset-2 col-8 pb-5 mb-5 lg:pb-0 lg:mb-0">
       <button type="submit" mat-flat-button [disabled]="!addEventForm.valid" color="primary">Dodaj</button>
     </div>
   </form>

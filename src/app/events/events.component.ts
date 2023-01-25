@@ -35,7 +35,16 @@ export class EventsComponent implements OnInit, OnDestroy {
   center: LatLng = latLng(51.12788, 16.982566);
   zoom = 15;
 
-  categories: string[] = ['Rower', 'Rolki', 'Spacer', 'Wyjście z psem', 'Inne'];
+  categories: string[] = [
+    'Rower',
+    'Rolki',
+    'Spacer',
+    'Wyjście z psem',
+    'Siłownia',
+    'Planszówki',
+    'Spacer z dzieckiem w wózku',
+    'Inne'
+  ];
   minDate = new Date();
 
   startDateFormControl = new FormControl<Date | null>(null);
