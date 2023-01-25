@@ -12,8 +12,10 @@ export class HeaderComponent implements OnInit {
 
   constructor(private keycloakService: KeycloakService) {}
 
-  ngOnInit(): void {
-    this.username = this.keycloakService.getUsername();
+  async ngOnInit(): Promise<void> {
+    if (await this.keycloakService.isLoggedIn()) {
+      this.username = this.keycloakService.getUsername();
+    }
   }
 
   onToggleSidenav(): void {
