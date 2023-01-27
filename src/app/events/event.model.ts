@@ -4,7 +4,16 @@ export interface EventReadModel {
   name: string;
   dateTime: Date;
   duration: number;
-  category?: string;
+  category: string;
+  minAge: number;
+  maxAge: number;
+  sex: string;
+  user: UserReadModel;
+}
+
+export interface UserReadModel {
+  username: string;
+  firstname: string;
 }
 
 export interface Position {

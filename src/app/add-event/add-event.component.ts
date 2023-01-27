@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { map, take } from 'rxjs';
 import { GeolocationService } from '@ng-web-apis/geolocation';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Constants } from '../core/constants.model';
 
 @Component({
   selector: 'app-add-event',
@@ -15,16 +16,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export class AddEventComponent {
   minDate = new Date();
 
-  categories: string[] = [
-    'Rower',
-    'Rolki',
-    'Spacer',
-    'Wyjście z psem',
-    'Siłownia',
-    'Planszówki',
-    'Spacer z dzieckiem w wózku',
-    'Inne'
-  ];
+  categories: string[] = Constants.CATEGORIES;
+
   gender: string[] = ['Męska', 'Żeńska', 'Inna', 'Dowolna'];
 
   options: MapOptions = {
@@ -45,7 +38,10 @@ export class AddEventComponent {
     duration: new FormControl(null, Validators.required),
     latitude: new FormControl<number | null>(null, Validators.required),
     longitude: new FormControl<number | null>(null, Validators.required),
-    category: new FormControl<string | null>(null, Validators.required)
+    category: new FormControl<string | null>(null, Validators.required),
+    minAge: new FormControl<number>(22, Validators.required),
+    maxAge: new FormControl<number>(46, Validators.required),
+    sex: new FormControl<string | null>(null, Validators.required)
   });
 
   layer: Layer | undefined;
@@ -72,6 +68,17 @@ export class AddEventComponent {
     });
   }
 
+  onMapReady(leafletMap: Map) {
+    this.geolocationService
+      .pipe(
+        take(1),
+        map((position: GeolocationPosition) => {
+          return latLng(position.coords.latitude, position.coords.longitude);
+        })
+      )
+      .subscribe((latLng: LatLng) => leafletMap.panTo(latLng));
+  }
+
   onSubmit(): void {
     this.addEventService
       .add({
@@ -80,7 +87,10 @@ export class AddEventComponent {
         name: this.addEventForm.value.name!,
         dateTime: this.getDate(),
         duration: this.addEventForm.value.duration!,
-        category: this.addEventForm.value.category!
+        category: this.addEventForm.value.category!,
+        minAge: this.addEventForm.value.minAge!,
+        maxAge: this.addEventForm.value.maxAge!,
+        sex: this.addEventForm.value.sex!
       })
       .subscribe(() => {
         this.snackBar.open('Dodano wydarzenie!', 'OK', {
@@ -97,16 +107,5 @@ export class AddEventComponent {
     date.setHours(+this.addEventForm.value.time!.substring(0, 2));
     date.setMinutes(+this.addEventForm.value.time!.substring(3, 5));
     return date;
-  }
-
-  onMapReady(leafletMap: Map) {
-    this.geolocationService
-      .pipe(
-        take(1),
-        map((position: GeolocationPosition) => {
-          return latLng(position.coords.latitude, position.coords.longitude);
-        })
-      )
-      .subscribe((latLng: LatLng) => leafletMap.panTo(latLng));
   }
 }

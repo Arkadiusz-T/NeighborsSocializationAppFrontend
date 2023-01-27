@@ -20,6 +20,7 @@ import { map, Subscription, take } from 'rxjs';
 import { EventReadModel } from './event.model';
 import { GeolocationService } from '@ng-web-apis/geolocation';
 import { FormControl } from '@angular/forms';
+import { Constants } from '../core/constants.model';
 
 @Component({
   selector: 'app-events',
@@ -35,16 +36,7 @@ export class EventsComponent implements OnInit, OnDestroy {
   center: LatLng = latLng(51.12788, 16.982566);
   zoom = 15;
 
-  categories: string[] = [
-    'Rower',
-    'Rolki',
-    'Spacer',
-    'Wyjście z psem',
-    'Siłownia',
-    'Planszówki',
-    'Spacer z dzieckiem w wózku',
-    'Inne'
-  ];
+  categories: string[] = Constants.CATEGORIES;
   minDate = new Date();
 
   startDateFormControl = new FormControl<Date | null>(null);
@@ -91,7 +83,11 @@ export class EventsComponent implements OnInit, OnDestroy {
           shadowUrl: 'assets/marker-shadow.png',
           iconSize: this.getSize(event.category)
         })
-      }).bindPopup(`<b>${event.name}</b><br>${formattedDate}<br>${duration} minut`);
+      }).bindPopup(`
+          <b>${event.name}</b><br>
+          ${formattedDate}, ${duration} minut<br>
+          Wiek: ${event.minAge}-${event.maxAge}, Płeć: ${event.sex}<br>
+          ${event.user?.firstname}, @${event.user?.username}`);
     });
   }
 
@@ -143,18 +139,11 @@ export class EventsComponent implements OnInit, OnDestroy {
           leafletMap.panTo(latLng);
           this.center = latLng;
           this.updateMapState();
-          const radiusInMeters = this.calculateRadiusInMeters();
-          this.eventsService.searchEvents(latLng, radiusInMeters);
-          this.addCircleLayer(latLng, radiusInMeters);
-
           this.addSearchHereControl(leafletMap);
         },
         error: () => {
           leafletMap.panTo(this.center);
-          const radiusInMeters = this.calculateRadiusInMeters();
-          this.eventsService.searchEvents(this.center, radiusInMeters);
-          this.addCircleLayer(this.center, radiusInMeters);
-
+          this.updateMapState();
           this.addSearchHereControl(leafletMap);
         }
       });

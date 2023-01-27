@@ -22,7 +22,11 @@
     <div class="lg:col-offset-2 col-12 sm:col-4 lg:col-3">
       <mat-form-field>
         <mat-label>Data wydarzenia</mat-label>
-        <input matInput [matDatepicker]="datePicker" formControlName="date" [min]="minDate" />
+        <input
+          matInput
+          [matDatepicker]="datePicker //noinspection ValidateTypes"
+          formControlName="date"
+          [min]="minDate" />
         <mat-hint>MM/DD/YYYY</mat-hint>
         <mat-datepicker-toggle matIconSuffix [for]="datePicker"></mat-datepicker-toggle>
         <mat-datepicker #datePicker></mat-datepicker>
@@ -55,8 +59,8 @@
     <div class="lg:col-offset-2 col-12 sm:col-7 lg:col-4 pl-3 age">
       <label>Wiek:</label>
       <mat-slider min="16" max="75" discrete>
-        <input value="22" matSliderStartThumb formControlName="minAge" />
-        <input value="46" matSliderEndThumb formControlName="maxAge" />
+        <input matSliderStartThumb formControlName="minAge" />
+        <input matSliderEndThumb formControlName="maxAge" />
       </mat-slider>
     </div>
 
