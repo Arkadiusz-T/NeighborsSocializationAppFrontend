@@ -101,6 +101,12 @@ export class EventsComponent implements OnInit, OnDestroy {
         return 'assets/walk_icon.png';
       case 'Wyjście z psem':
         return 'assets/dog_icon.png';
+      case 'Siłownia':
+        return 'assets/gym_icon.png';
+      case 'Spacer z dzieckiem w wózku':
+        return 'assets/baby_carriage_icon.png';
+      case 'Planszówki':
+        return 'assets/cube_icon.png';
       default:
         return 'assets/marker-icon.png';
     }
@@ -116,6 +122,12 @@ export class EventsComponent implements OnInit, OnDestroy {
         return [35, 35];
       case 'Wyjście z psem':
         return [51, 51];
+      case 'Siłownia':
+        return [42, 42];
+      case 'Spacer z dzieckiem w wózku':
+        return [42, 42];
+      case 'Planszówki':
+        return [42, 42];
       default:
         return [25, 41];
     }
