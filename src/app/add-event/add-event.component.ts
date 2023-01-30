@@ -6,7 +6,7 @@ import { Router } from '@angular/router';
 import { map, take } from 'rxjs';
 import { GeolocationService } from '@ng-web-apis/geolocation';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Constants } from '../core/constants.model';
+import { Categories } from '../core/categories.model';
 
 @Component({
   selector: 'app-add-event',
@@ -16,7 +16,7 @@ import { Constants } from '../core/constants.model';
 export class AddEventComponent {
   minDate = new Date();
 
-  categories: string[] = Constants.CATEGORIES;
+  categories: string[] = Categories.keys();
 
   gender: string[] = ['Męska', 'Żeńska', 'Inna', 'Dowolna'];
 

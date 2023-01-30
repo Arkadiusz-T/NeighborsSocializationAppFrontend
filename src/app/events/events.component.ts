@@ -20,7 +20,7 @@ import { map, Subscription, take } from 'rxjs';
 import { EventReadModel } from './event.model';
 import { GeolocationService } from '@ng-web-apis/geolocation';
 import { FormControl } from '@angular/forms';
-import { Constants } from '../core/constants.model';
+import { Categories, CategoryIcon } from '../core/categories.model';
 
 @Component({
   selector: 'app-events',
@@ -36,7 +36,7 @@ export class EventsComponent implements OnInit, OnDestroy {
   center: LatLng = latLng(51.12788, 16.982566);
   zoom = 15;
 
-  categories: string[] = Constants.CATEGORIES;
+  categories: string[] = Categories.keys();
   minDate = new Date();
 
   startDateFormControl = new FormControl<Date | null>(null);
@@ -75,13 +75,14 @@ export class EventsComponent implements OnInit, OnDestroy {
         hour: 'numeric',
         minute: '2-digit'
       });
+      const category: CategoryIcon = Categories.get(event.category)!;
 
       return marker(latLng(event.position.y, event.position.x), {
         icon: icon({
           ...Icon.Default.prototype.options,
-          iconUrl: this.getIconUrl(event.category),
+          iconUrl: category.iconUrl,
           shadowUrl: 'assets/marker-shadow.png',
-          iconSize: this.getSize(event.category)
+          iconSize: category.iconSize
         })
       }).bindPopup(`
           <b>${event.name}</b><br>
@@ -89,48 +90,6 @@ export class EventsComponent implements OnInit, OnDestroy {
           Wiek: ${event.minAge}-${event.maxAge}, Płeć: ${event.sex}<br>
           ${event.user?.firstname}, @${event.user?.username}`);
     });
-  }
-
-  private getIconUrl(category?: string): string {
-    switch (category) {
-      case 'Rower':
-        return 'assets/bicycle_icon.png';
-      case 'Rolki':
-        return 'assets/rollerblades_icon.png';
-      case 'Spacer':
-        return 'assets/walk_icon.png';
-      case 'Wyjście z psem':
-        return 'assets/dog_icon.png';
-      case 'Siłownia':
-        return 'assets/gym_icon.png';
-      case 'Spacer z dzieckiem w wózku':
-        return 'assets/baby_carriage_icon.png';
-      case 'Planszówki':
-        return 'assets/cube_icon.png';
-      default:
-        return 'assets/marker-icon.png';
-    }
-  }
-
-  private getSize(category?: string): PointTuple {
-    switch (category) {
-      case 'Rower':
-        return [55, 55];
-      case 'Rolki':
-        return [43, 43];
-      case 'Spacer':
-        return [35, 35];
-      case 'Wyjście z psem':
-        return [51, 51];
-      case 'Siłownia':
-        return [42, 42];
-      case 'Spacer z dzieckiem w wózku':
-        return [42, 42];
-      case 'Planszówki':
-        return [42, 42];
-      default:
-        return [25, 41];
-    }
   }
 
   ngOnDestroy(): void {
