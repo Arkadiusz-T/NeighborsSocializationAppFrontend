@@ -12,8 +12,7 @@ import {
   Control,
   DomUtil,
   DomEvent,
-  circle,
-  PointTuple
+  circle
 } from 'leaflet';
 import { EventsService } from './events.service';
 import { map, Subscription, take } from 'rxjs';
